@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ticket Crowdfunding DApp</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="brand">
+          <h1>Ticketing (Crowdfunding) DApp</h1>
+          <p>Create Event → Buy Ticket (Contribution) → Wait for Deadline → Finalize → Claim/Refund</p>
+        </div>
+
+        <div class="pill-row">
+          <button id="connectBtn" class="btn-primary">Connect MetaMask</button>
+
+          <div class="pill">
+            <span class="badge"><span class="dot" id="netDot"></span>Network</span>
+            <strong id="chain">-</strong>
+          </div>
+
+          <div class="pill">
+            <span>Address</span>
+            <strong id="addr">-</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>Create Event</h2>
+          <div class="row cols-3">
+            <div class="field">
+              <label for="title">Title</label>
+              <input id="title" />
+            </div>
+            <div class="field">
+              <label for="goalEth">Goal (ETH)</label>
+            <input id="goalEth" inputmode="decimal" />
+            </div>
+            <div class="field">
+              <label for="duration">Duration (sec)</label>
+              <input id="duration"inputmode="numeric" />
+            </div>
+          </div>
+          <div class="actions">
+            <button id="createBtn" class="btn-primary">Create</button>
+            <span class="small">Tip: for refund scenario, make goal greater than contribution</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Balances</h2>
+          <div class="actions">
+            <button id="refreshBtn">Refresh</button>
+
+          </div>
+          <div class="kpis">
+            <div class="kpi">
+              <div class="label">ETH</div>
+              <div class="value" id="ethBal">-</div>
+            </div>
+            <div class="kpi">
+              <div class="label">TIX</div>
+              <div class="value" id="tixBal">-</div>
+            </div>
+          </div>
+          <div class="hr"></div>
+          <pre id="log"></pre>
+        </div>
+
+        <div class="card span-2">
+          <h2>Manage / View Event</h2>
+          <div class="row cols-4">
+            <div class="field">
+              <label for="manageEventId">Event ID</label>
+              <input id="manageEventId" inputmode="numeric" />
+            </div>
+            <div class="field">
+              <label>&nbsp;</label>
+              <button id="viewBtn">View</button>
+            </div>
+            <div class="field">
+              <label>&nbsp;</label>
+              <button id="finalizeBtn">Finalize</button>
+            </div>
+            <div class="field">
+              <label>&nbsp;</label>
+              <button id="claimBtn" class="btn-primary">Claim Funds (creator)</button>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="refundBtn" class="btn-danger">Refund (contributor)</button>
+            <span class="small">you can Finalize only after the deadline. Refund is possible only if the goal is NOT reached</span>
+          </div>
+
+          <pre id="eventView"></pre>
+        </div>
+
+        <div class="card span-2">
+          <h2>Contribute (Buy Ticket)</h2>
+          <div class="row cols-2">
+            <div class="field">
+              <label for="eventId">Event ID</label>
+              <input id="eventId"  inputmode="numeric" />
+            </div>
+            <div class="field">
+              <label for="amountEth">Amount (ETH)</label>
+              <input id="amountEth"  inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="contributeBtn" class="btn-primary">Contribute</button>
+            <span class="small">if event finalized → contribute will revert.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+    <script src="./app.js"></script>
+    <script>
+      const netDot = document.getElementById("netDot");
+      const chainEl = document.getElementById("chain");
+      const obs = new MutationObserver(() => {
+        const ok = chainEl.textContent.trim() === "11155111";
+        netDot.className = "dot " + (ok ? "ok" : "no");
+      });
+      obs.observe(chainEl, { childList: true, characterData: true, subtree: true });
+    </script>
+  </body>
+</html>
